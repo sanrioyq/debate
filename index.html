@@ -4,831 +4,781 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Academy for Young Voices</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    /* ── Reset & Base ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --navy:   #1a2e4a;
-      --gold:   #c9a84c;
-      --light:  #f5f7fa;
-      --white:  #ffffff;
-      --text:   #2d3748;
-      --muted:  #718096;
+      --bg: #ffffff;
+      --bg2: #f9fafb;
+      --navy: #0f172a;
+      --ink: #1e293b;
+      --muted: #64748b;
+      --light: #94a3b8;
       --border: #e2e8f0;
-      --accent: #2563eb;
-      --radius: 10px;
-      --shadow: 0 4px 24px rgba(0,0,0,0.08);
+      --indigo: #4f46e5;
+      --indigo-light: #eef2ff;
+      --amber: #f59e0b;
+      --amber-light: #fffbeb;
+      --green: #10b981;
+      --r: 12px;
     }
+
     html { scroll-behavior: smooth; }
     body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      color: var(--text);
-      background: var(--white);
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
       line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
     }
     a { color: inherit; text-decoration: none; }
-    img { max-width: 100%; display: block; }
 
-    /* ── Navigation ── */
+    /* ─── NAV ─── */
     nav {
-      position: sticky; top: 0; z-index: 100;
-      background: var(--navy);
-      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
       padding: 0 2rem;
-      height: 64px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+      height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
     }
     .nav-logo {
-      display: flex; align-items: center; gap: 0.6rem;
-      color: var(--white); font-weight: 700; font-size: 1.1rem; letter-spacing: 0.01em;
+      font-weight: 800; font-size: 1rem; color: var(--navy);
+      display: flex; align-items: center; gap: 0.5rem;
+      letter-spacing: -0.02em;
     }
-    .nav-logo span { color: var(--gold); }
-    .nav-links {
-      display: flex; gap: 0.25rem; list-style: none;
-    }
+    .nav-logo .dot { color: var(--indigo); }
+    .nav-links { display: flex; gap: 0.1rem; list-style: none; }
     .nav-links a {
-      color: rgba(255,255,255,0.82);
-      padding: 0.45rem 0.9rem;
-      border-radius: 6px;
-      font-size: 0.92rem;
-      font-weight: 500;
-      transition: background 0.2s, color 0.2s;
+      padding: 0.4rem 0.85rem;
+      font-size: 0.875rem; font-weight: 500; color: var(--muted);
+      border-radius: 8px; transition: color 0.15s, background 0.15s;
     }
-    .nav-links a:hover,
-    .nav-links a.active { background: rgba(201,168,76,0.18); color: var(--gold); }
+    .nav-links a:hover { color: var(--navy); background: var(--bg2); }
+    .nav-links a.active { color: var(--navy); font-weight: 600; }
+    .nav-cta {
+      background: var(--navy); color: #fff !important;
+      padding: 0.4rem 1rem !important;
+      border-radius: 8px !important;
+      font-weight: 600 !important;
+      transition: opacity 0.15s !important;
+    }
+    .nav-cta:hover { opacity: 0.85; background: var(--navy) !important; color: #fff !important; }
     .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.4rem; }
-    .nav-toggle span {
-      display: block; width: 22px; height: 2px; background: var(--white); margin: 5px 0;
-      border-radius: 2px; transition: 0.3s;
-    }
+    .nav-toggle span { display: block; width: 20px; height: 2px; background: var(--navy); margin: 4px 0; border-radius: 2px; }
 
-    /* ── Page Sections ── */
+    /* ─── PAGE ROUTING ─── */
     .page { display: none; }
     .page.active { display: block; }
 
-    /* ── Hero ── */
+    /* ─── HERO ─── */
     .hero {
-      background: linear-gradient(135deg, var(--navy) 0%, #0f1e30 100%);
-      color: var(--white);
       padding: 6rem 2rem 5rem;
       text-align: center;
-      position: relative; overflow: hidden;
+      background: linear-gradient(180deg, #f0f4ff 0%, #fff 100%);
+      border-bottom: 1px solid var(--border);
     }
-    .hero::before {
-      content: ''; position: absolute; inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    }
-    .hero-tag {
-      display: inline-block;
-      background: rgba(201,168,76,0.2); color: var(--gold);
-      border: 1px solid rgba(201,168,76,0.4);
-      border-radius: 999px; padding: 0.3rem 1rem;
-      font-size: 0.82rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
-      margin-bottom: 1.5rem;
+    .pill {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--indigo-light); color: var(--indigo);
+      border: 1px solid #c7d2fe; border-radius: 999px;
+      padding: 0.3rem 0.9rem; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.02em; margin-bottom: 1.8rem;
     }
     .hero h1 {
-      font-size: clamp(2.2rem, 5vw, 3.6rem);
-      font-weight: 800; line-height: 1.15;
-      margin-bottom: 1.2rem;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 900; letter-spacing: -0.04em;
+      line-height: 1.1; color: var(--navy);
+      max-width: 700px; margin: 0 auto 1.2rem;
     }
-    .hero h1 em { color: var(--gold); font-style: normal; }
+    .hero h1 .accent { color: var(--indigo); }
     .hero p {
-      font-size: 1.15rem; color: rgba(255,255,255,0.78);
-      max-width: 560px; margin: 0 auto 2.4rem;
+      font-size: 1.1rem; color: var(--muted); max-width: 520px;
+      margin: 0 auto 2.4rem; line-height: 1.7;
     }
+    .btn-row { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
     .btn {
-      display: inline-block;
-      padding: 0.75rem 1.8rem;
-      border-radius: 8px;
-      font-weight: 600; font-size: 0.95rem;
-      cursor: pointer; border: none; transition: transform 0.15s, box-shadow 0.15s;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.7rem 1.5rem; border-radius: 10px;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none;
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
     }
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
-    .btn-gold { background: var(--gold); color: var(--navy); }
-    .btn-outline { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.4); margin-left: 0.8rem; }
-    .btn-outline:hover { border-color: var(--white); }
-    .btn-navy { background: var(--navy); color: var(--white); }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--indigo); color: #fff; box-shadow: 0 1px 6px rgba(79,70,229,0.35); }
+    .btn-primary:hover { box-shadow: 0 4px 16px rgba(79,70,229,0.4); }
+    .btn-ghost { background: #fff; color: var(--navy); border: 1.5px solid var(--border); }
+    .btn-ghost:hover { border-color: #c7d2fe; }
 
-    /* ── Stats bar ── */
-    .stats-bar {
-      background: var(--gold);
-      display: flex; justify-content: center; flex-wrap: wrap; gap: 0;
+    /* ─── STATS ─── */
+    .stats {
+      display: flex; justify-content: center; flex-wrap: wrap;
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      background: var(--bg);
     }
-    .stat-item {
-      padding: 1.2rem 3rem;
-      text-align: center; border-right: 1px solid rgba(26,46,74,0.2);
+    .stat {
+      padding: 2rem 3.5rem; text-align: center;
+      border-right: 1px solid var(--border);
     }
-    .stat-item:last-child { border-right: none; }
-    .stat-num { font-size: 2rem; font-weight: 800; color: var(--navy); line-height: 1; }
-    .stat-label { font-size: 0.8rem; color: var(--navy); opacity: 0.75; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.2rem; }
+    .stat:last-child { border-right: none; }
+    .stat-n { font-size: 2.2rem; font-weight: 900; color: var(--navy); letter-spacing: -0.04em; line-height: 1; }
+    .stat-l { font-size: 0.78rem; color: var(--muted); font-weight: 500; margin-top: 0.3rem; text-transform: uppercase; letter-spacing: 0.06em; }
 
-    /* ── Section Basics ── */
-    section { padding: 5rem 2rem; }
-    .container { max-width: 1080px; margin: 0 auto; }
-    .section-label {
-      display: inline-block;
-      color: var(--gold); font-weight: 700; font-size: 0.78rem;
-      letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.6rem;
-    }
-    h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; color: var(--navy); margin-bottom: 1rem; }
-    .lead { font-size: 1.05rem; color: var(--muted); max-width: 640px; }
+    /* ─── LAYOUT HELPERS ─── */
+    .section { padding: 5.5rem 2rem; }
+    .section.tinted { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .wrap { max-width: 1060px; margin: 0 auto; }
+    .eyebrow { font-size: 0.75rem; font-weight: 700; color: var(--indigo); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.6rem; }
+    h2.sec { font-size: clamp(1.7rem, 3.5vw, 2.5rem); font-weight: 800; color: var(--navy); letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 0.8rem; }
+    .sub { font-size: 1rem; color: var(--muted); max-width: 580px; line-height: 1.7; }
+    .head-block { margin-bottom: 3rem; }
 
-    /* ── Cards ── */
-    .card-grid { display: grid; gap: 1.5rem; margin-top: 2.5rem; }
-    .card-grid-3 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-    .card-grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-    .card {
-      background: var(--white); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 2rem;
-      box-shadow: var(--shadow); transition: transform 0.2s, box-shadow 0.2s;
+    /* ─── GRID ─── */
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; }
+
+    /* ─── FEATURE CARD ─── */
+    .fcard {
+      background: var(--bg); border: 1px solid var(--border); border-radius: var(--r);
+      padding: 1.8rem; transition: box-shadow 0.2s, transform 0.2s;
     }
-    .card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,0,0,0.1); }
-    .card-icon {
-      width: 48px; height: 48px; border-radius: 10px;
-      background: linear-gradient(135deg, var(--navy), #2563eb);
+    .fcard:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.07); transform: translateY(-3px); }
+    .fcard .ico {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: var(--indigo-light); color: var(--indigo);
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem; margin-bottom: 1.1rem;
+      font-size: 1.25rem; margin-bottom: 1rem;
     }
-    .card h3 { font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.5rem; }
-    .card p { font-size: 0.93rem; color: var(--muted); line-height: 1.65; }
+    .fcard h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.4rem; }
+    .fcard p { font-size: 0.88rem; color: var(--muted); line-height: 1.65; }
 
-    /* ── Highlight strip ── */
-    .highlight { background: var(--light); }
-
-    /* ── Team ── */
-    .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
-    .team-card {
-      text-align: center; background: var(--white); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 2rem 1.5rem; box-shadow: var(--shadow);
+    /* ─── TEAM CARD ─── */
+    .tcard {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 2rem; text-align: left;
+      transition: box-shadow 0.2s, transform 0.2s;
     }
-    .avatar {
-      width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 1rem;
-      background: linear-gradient(135deg, var(--navy), #2563eb);
+    .tcard:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.07); transform: translateY(-3px); }
+    .avatar-wrap { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; }
+    .av {
+      width: 56px; height: 56px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--indigo), #818cf8);
       display: flex; align-items: center; justify-content: center;
-      font-size: 2rem; color: white; font-weight: 700;
+      font-weight: 800; font-size: 1.2rem; color: #fff;
     }
-    .team-card h3 { font-size: 1rem; font-weight: 700; color: var(--navy); }
-    .team-card .role { font-size: 0.82rem; color: var(--gold); font-weight: 600; margin-top: 0.2rem; }
-    .team-card p { font-size: 0.88rem; color: var(--muted); margin-top: 0.6rem; line-height: 1.5; }
+    .av-info .name { font-size: 1.05rem; font-weight: 700; color: var(--navy); }
+    .av-info .role { font-size: 0.8rem; color: var(--indigo); font-weight: 600; margin-top: 0.1rem; }
+    .tcard p { font-size: 0.875rem; color: var(--muted); line-height: 1.7; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
+    .chip {
+      display: inline-block; background: var(--indigo-light); color: var(--indigo);
+      border-radius: 999px; padding: 0.2rem 0.7rem;
+      font-size: 0.75rem; font-weight: 600;
+    }
+    .chip.amber { background: var(--amber-light); color: #92400e; }
 
-    /* ── Camp / Events ── */
-    .camp-banner {
-      background: linear-gradient(135deg, var(--navy) 0%, #0f3460 100%);
-      color: var(--white); border-radius: 16px; padding: 3rem;
-      display: flex; flex-wrap: wrap; gap: 2rem; align-items: center;
-      justify-content: space-between; margin-bottom: 3rem;
+    /* ─── CAMP CARD ─── */
+    .camp-hero {
+      background: linear-gradient(135deg, var(--navy) 0%, #1e3a5f 100%);
+      border-radius: 16px; padding: 3rem;
+      color: #fff; margin-bottom: 2.5rem;
     }
-    .camp-banner h2 { color: var(--white); margin-bottom: 0.4rem; }
-    .camp-banner p { color: rgba(255,255,255,0.75); max-width: 480px; }
-    .badge {
-      display: inline-block; background: var(--gold); color: var(--navy);
-      border-radius: 999px; padding: 0.25rem 0.9rem;
-      font-size: 0.78rem; font-weight: 700; margin-bottom: 0.8rem;
+    .camp-hero .pill-light {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.9);
+      border: 1px solid rgba(255,255,255,0.2); border-radius: 999px;
+      padding: 0.3rem 0.9rem; font-size: 0.78rem; font-weight: 600; margin-bottom: 1rem;
     }
-    .event-card {
-      background: var(--white); border: 1px solid var(--border);
-      border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
-      transition: transform 0.2s;
-    }
-    .event-card:hover { transform: translateY(-4px); }
-    .event-head {
-      background: var(--navy); color: var(--white);
-      padding: 1.2rem 1.5rem;
-    }
-    .event-head .date { font-size: 0.8rem; color: var(--gold); font-weight: 600; margin-bottom: 0.3rem; }
-    .event-head h3 { font-size: 1.1rem; font-weight: 700; }
-    .event-body { padding: 1.5rem; }
-    .event-body p { font-size: 0.92rem; color: var(--muted); margin-bottom: 1rem; }
-    .tag {
-      display: inline-block; background: var(--light); color: var(--navy);
-      border-radius: 6px; padding: 0.2rem 0.6rem;
-      font-size: 0.78rem; font-weight: 600; margin-right: 0.4rem;
-    }
+    .camp-hero h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.6rem; }
+    .camp-hero p { color: rgba(255,255,255,0.75); font-size: 0.95rem; max-width: 540px; line-height: 1.7; margin-bottom: 2rem; }
+    .camp-meta { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .camp-meta-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; }
+    .camp-meta-item .label { color: rgba(255,255,255,0.55); }
+    .camp-meta-item .val { color: #fff; font-weight: 600; }
 
-    /* ── Resources ── */
-    .resource-list { margin-top: 2.5rem; display: grid; gap: 1rem; }
-    .resource-item {
-      background: var(--white); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.4rem 1.6rem;
-      display: flex; align-items: center; gap: 1.2rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: box-shadow 0.2s;
+    /* ─── SESSION CARD ─── */
+    .scard {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--r); overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
     }
-    .resource-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
-    .resource-icon {
-      width: 44px; height: 44px; border-radius: 8px; flex-shrink: 0;
-      background: var(--light); display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+    .scard:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); transform: translateY(-3px); }
+    .scard-head { padding: 1.4rem 1.6rem; border-bottom: 1px solid var(--border); }
+    .scard-head .badge {
+      display: inline-block; border-radius: 6px; padding: 0.2rem 0.6rem;
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;
     }
-    .resource-info h4 { font-size: 0.97rem; font-weight: 700; color: var(--navy); }
-    .resource-info p { font-size: 0.86rem; color: var(--muted); margin-top: 0.2rem; }
-    .resource-link { margin-left: auto; flex-shrink: 0; }
-    .resource-link a {
-      color: var(--accent); font-size: 0.85rem; font-weight: 600;
-      border: 1px solid var(--accent); border-radius: 6px; padding: 0.3rem 0.8rem;
-      transition: background 0.15s, color 0.15s;
-    }
-    .resource-link a:hover { background: var(--accent); color: white; }
+    .badge-blue { background: var(--indigo-light); color: var(--indigo); }
+    .badge-amber { background: var(--amber-light); color: #92400e; }
+    .scard-head h3 { font-size: 1.05rem; font-weight: 700; color: var(--navy); }
+    .scard-body { padding: 1.4rem 1.6rem; }
+    .scard-body p { font-size: 0.875rem; color: var(--muted); line-height: 1.65; margin-bottom: 1rem; }
+    .meta-row { display: flex; flex-direction: column; gap: 0.5rem; }
+    .meta-row .mi { font-size: 0.82rem; color: var(--muted); display: flex; gap: 0.5rem; }
+    .meta-row .mi strong { color: var(--navy); }
 
-    /* ── Contact ── */
-    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2.5rem; }
-    .contact-info h3 { font-size: 1.2rem; font-weight: 700; color: var(--navy); margin-bottom: 1.5rem; }
-    .contact-row {
-      display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.2rem;
+    /* ─── RESOURCES ─── */
+    .rlist { display: grid; gap: 0.75rem; }
+    .ritem {
+      background: var(--bg); border: 1px solid var(--border); border-radius: var(--r);
+      padding: 1.1rem 1.4rem; display: flex; align-items: center; gap: 1rem;
+      transition: box-shadow 0.15s;
     }
-    .contact-row .ci { font-size: 1.3rem; margin-top: 0.1rem; }
-    .contact-row strong { display: block; font-size: 0.85rem; color: var(--navy); font-weight: 700; }
-    .contact-row span { font-size: 0.93rem; color: var(--muted); }
-    .contact-form { background: var(--light); border-radius: var(--radius); padding: 2rem; }
-    .contact-form h3 { font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 1.5rem; }
-    label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--navy); margin-bottom: 0.35rem; }
+    .ritem:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+    .rico { width: 40px; height: 40px; border-radius: 8px; background: var(--bg2); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+    .rinfo h4 { font-size: 0.9rem; font-weight: 700; color: var(--navy); }
+    .rinfo p { font-size: 0.82rem; color: var(--muted); margin-top: 0.1rem; }
+    .rlink { margin-left: auto; flex-shrink: 0; }
+    .rlink a { font-size: 0.8rem; font-weight: 600; color: var(--indigo); border: 1px solid #c7d2fe; border-radius: 6px; padding: 0.25rem 0.7rem; transition: background 0.15s; }
+    .rlink a:hover { background: var(--indigo-light); }
+
+    /* ─── CONTACT ─── */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 3rem; }
+    .cinfo h3 { font-size: 1.15rem; font-weight: 700; color: var(--navy); margin-bottom: 1.5rem; }
+    .crow { display: flex; gap: 1rem; margin-bottom: 1.2rem; align-items: flex-start; }
+    .cico { font-size: 1.2rem; margin-top: 0.1rem; }
+    .ctext strong { display: block; font-size: 0.8rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .ctext span, .ctext a { font-size: 0.95rem; color: var(--navy); font-weight: 500; }
+    .ctext a { color: var(--indigo); }
+    .cform { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; }
+    .cform h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 1.5rem; }
+    label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--navy); margin-bottom: 0.35rem; }
     input, textarea, select {
-      width: 100%; padding: 0.7rem 0.9rem;
-      border: 1px solid var(--border); border-radius: 6px;
-      font-size: 0.92rem; font-family: inherit; color: var(--text);
-      background: var(--white); margin-bottom: 1rem;
-      transition: border-color 0.2s;
+      width: 100%; padding: 0.65rem 0.9rem;
+      border: 1px solid var(--border); border-radius: 8px;
+      font-size: 0.88rem; font-family: inherit; color: var(--ink);
+      background: var(--bg); margin-bottom: 1rem; transition: border-color 0.2s, box-shadow 0.2s;
     }
-    input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); }
-    textarea { min-height: 120px; resize: vertical; }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: var(--indigo); box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
+    textarea { min-height: 110px; resize: vertical; }
 
-    /* ── Footer ── */
-    footer {
-      background: var(--navy); color: rgba(255,255,255,0.65);
-      padding: 3rem 2rem 1.5rem;
-    }
-    .footer-inner { max-width: 1080px; margin: 0 auto; }
-    .footer-top { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: space-between; margin-bottom: 2.5rem; }
-    .footer-brand { max-width: 300px; }
-    .footer-brand .logo { color: var(--white); font-weight: 800; font-size: 1.1rem; margin-bottom: 0.7rem; }
-    .footer-brand .logo span { color: var(--gold); }
-    .footer-brand p { font-size: 0.88rem; line-height: 1.65; }
-    .footer-col h4 { color: var(--white); font-size: 0.88rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1rem; }
-    .footer-col ul { list-style: none; }
-    .footer-col ul li { margin-bottom: 0.5rem; }
-    .footer-col ul li a { font-size: 0.9rem; transition: color 0.2s; }
-    .footer-col ul li a:hover { color: var(--gold); }
-    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; text-align: center; font-size: 0.82rem; }
+    /* ─── FOOTER ─── */
+    footer { background: var(--navy); color: rgba(255,255,255,0.5); padding: 3rem 2rem 2rem; }
+    .footer-wrap { max-width: 1060px; margin: 0 auto; }
+    .footer-top { display: flex; flex-wrap: wrap; gap: 2.5rem; justify-content: space-between; margin-bottom: 2.5rem; }
+    .fb .flogo { color: #fff; font-weight: 800; font-size: 1rem; letter-spacing: -0.02em; margin-bottom: 0.6rem; }
+    .fb .flogo .dot { color: #818cf8; }
+    .fb p { font-size: 0.85rem; line-height: 1.65; max-width: 260px; }
+    .fc h4 { color: rgba(255,255,255,0.4); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .fc ul { list-style: none; }
+    .fc ul li { margin-bottom: 0.5rem; }
+    .fc ul li a { font-size: 0.88rem; color: rgba(255,255,255,0.6); transition: color 0.15s; }
+    .fc ul li a:hover { color: #fff; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.5rem; font-size: 0.8rem; text-align: center; }
 
-    /* ── Responsive ── */
+    /* ─── DIVIDER ─── */
+    .divider { height: 1px; background: var(--border); margin: 3rem 0; }
+
+    /* ─── RESPONSIVE ─── */
     @media (max-width: 768px) {
-      .nav-links { display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: var(--navy); padding: 1rem; gap: 0.2rem; }
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0; background: var(--bg); border-bottom: 1px solid var(--border); padding: 1rem; gap: 0.2rem; }
       .nav-links.open { display: flex; }
       .nav-toggle { display: block; }
+      .stats { justify-content: flex-start; }
+      .stat { padding: 1.5rem 2rem; border-right: none; border-bottom: 1px solid var(--border); }
       .contact-grid { grid-template-columns: 1fr; }
-      .camp-banner { flex-direction: column; }
-      .stat-item { padding: 1rem 1.5rem; }
+      .camp-hero { padding: 2rem; }
     }
   </style>
 </head>
 <body>
 
-<!-- ══ NAV ══ -->
+<!-- NAV -->
 <nav>
-  <div class="nav-logo">
-    🎤 <span>Academy</span>&nbsp;for Young Voices
-  </div>
+  <div class="nav-logo">Academy for Young<span class="dot"> Voices</span></div>
   <ul class="nav-links" id="navLinks">
-    <li><a href="#" class="active" onclick="showPage('home',this)">Home</a></li>
-    <li><a href="#" onclick="showPage('about',this)">About</a></li>
-    <li><a href="#" onclick="showPage('events',this)">Events</a></li>
-    <li><a href="#" onclick="showPage('resources',this)">Resources</a></li>
-    <li><a href="#" onclick="showPage('contact',this)">Contact Us</a></li>
+    <li><a href="#" class="active" onclick="go('home',this);return false;">Home</a></li>
+    <li><a href="#" onclick="go('about',this);return false;">About</a></li>
+    <li><a href="#" onclick="go('events',this);return false;">Events</a></li>
+    <li><a href="#" onclick="go('resources',this);return false;">Resources</a></li>
+    <li><a href="#" class="nav-cta" onclick="go('contact',this);return false;">Contact Us</a></li>
   </ul>
-  <button class="nav-toggle" id="navToggle" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
 
-<!-- ══════════════════════════════════════
-     PAGE: HOME
-══════════════════════════════════════ -->
+
+<!-- ████████████████  HOME  ████████████████ -->
 <div class="page active" id="page-home">
 
-  <!-- Hero -->
   <div class="hero">
-    <div class="hero-tag">Debate · Leadership · Growth</div>
-    <h1>Find Your Voice.<br/><em>Own the Room.</em></h1>
-    <p>Academy for Young Voices empowers the next generation of thinkers and leaders through competitive debate training, mentorship, and community.</p>
-    <button class="btn btn-gold" onclick="showPage('events', document.querySelector('[onclick*=events]'))">Summer Camp 2025</button>
-    <button class="btn btn-outline" onclick="showPage('about', document.querySelector('[onclick*=about]'))">Learn More</button>
+    <div class="pill">🎤 Speech & Debate · Bellevue, WA</div>
+    <h1>Build Confidence.<br/><span class="accent">Find Your Voice.</span></h1>
+    <p>We inspire kids to develop public speaking skills in a positive, supportive environment — building confidence, communication, and the courage to express their ideas.</p>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="go('events',null)">View Summer Camp →</button>
+      <button class="btn btn-ghost" onclick="go('about',null)">Meet the Coaches</button>
+    </div>
   </div>
 
-  <!-- Stats -->
-  <div class="stats-bar">
-    <div class="stat-item">
-      <div class="stat-num">2</div>
-      <div class="stat-label">Student Coaches</div>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-n">4+</div>
+      <div class="stat-l">Years of Debate</div>
     </div>
-    <div class="stat-item">
-      <div class="stat-num">50+</div>
-      <div class="stat-label">Students Coached</div>
+    <div class="stat">
+      <div class="stat-n">2</div>
+      <div class="stat-l">Expert Coaches</div>
     </div>
-    <div class="stat-item">
-      <div class="stat-num">TBD</div>
-      <div class="stat-label">Camp Spots Available</div>
+    <div class="stat">
+      <div class="stat-n">Aug '25</div>
+      <div class="stat-l">Summer Camp</div>
     </div>
-    <div class="stat-item">
-      <div class="stat-num">★ TBD</div>
-      <div class="stat-label">Awards Won</div>
+    <div class="stat">
+      <div class="stat-n">Gr 3–8</div>
+      <div class="stat-l">Students Served</div>
     </div>
   </div>
 
   <!-- Why us -->
-  <section>
-    <div class="container">
-      <span class="section-label">Why Choose Us</span>
-      <h2>Debate training that actually works</h2>
-      <p class="lead">We're not just coaches — we're students who've been in your shoes. We know what it takes to succeed on the debate floor.</p>
-
-      <div class="card-grid card-grid-3">
-        <div class="card">
-          <div class="card-icon">🏆</div>
-          <h3>Proven Experience</h3>
-          <p>[Placeholder] Describe your competition record, awards, and achievements from middle school and high school debate here.</p>
+  <div class="section">
+    <div class="wrap">
+      <div class="head-block">
+        <div class="eyebrow">Why choose us</div>
+        <h2 class="sec">Coached by students who've been there</h2>
+        <p class="sub">We're not just coaches — we're current high school debaters who started exactly where your student is now. We know what works.</p>
+      </div>
+      <div class="grid-3">
+        <div class="fcard">
+          <div class="ico">🏆</div>
+          <h3>Proven Track Record</h3>
+          <p>State-level competitors in LD, Policy, Public Forum, and Parliamentary debate — including Washington State National Qualifiers placements.</p>
         </div>
-        <div class="card">
-          <div class="card-icon">🎯</div>
-          <h3>Personalized Coaching</h3>
-          <p>[Placeholder] Explain your coaching philosophy — small groups, individual attention, customized feedback, etc.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">🤝</div>
+        <div class="fcard">
+          <div class="ico">🤝</div>
           <h3>Peer-to-Peer Learning</h3>
-          <p>[Placeholder] Highlight the advantage of being coached by peers who recently competed at the same level.</p>
+          <p>Learning from coaches who recently competed at the same level creates a more relatable, effective, and encouraging experience.</p>
         </div>
-        <div class="card">
-          <div class="card-icon">📚</div>
-          <h3>Comprehensive Curriculum</h3>
-          <p>[Placeholder] List the skills covered — argumentation, research, cross-examination, rebuttals, public speaking, etc.</p>
+        <div class="fcard">
+          <div class="ico">🎯</div>
+          <h3>Personalized Feedback</h3>
+          <p>Small class sizes mean every student gets real, actionable feedback tailored to their skill level and learning style.</p>
         </div>
-        <div class="card">
-          <div class="card-icon">🌟</div>
-          <h3>Real Tournament Prep</h3>
-          <p>[Placeholder] Describe how you simulate tournament conditions and prepare students for real competitive rounds.</p>
+        <div class="fcard">
+          <div class="ico">🗣️</div>
+          <h3>Public Speaking Skills</h3>
+          <p>From structuring a speech to controlling nerves on stage, we build skills that help students in school and beyond debate.</p>
         </div>
-        <div class="card">
-          <div class="card-icon">🎤</div>
-          <h3>Confidence Building</h3>
-          <p>[Placeholder] Talk about how debate builds lifelong communication skills beyond just winning rounds.</p>
+        <div class="fcard">
+          <div class="ico">🌱</div>
+          <h3>Supportive Environment</h3>
+          <p>We believe every student can find their voice. Our workshops are designed to be encouraging, inclusive, and fun.</p>
+        </div>
+        <div class="fcard">
+          <div class="ico">📍</div>
+          <h3>Local & Accessible</h3>
+          <p>Based in Bellevue, WA — partnering with local schools like Northwest Chinese School to bring quality debate training to our community.</p>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- Summer camp teaser -->
-  <section class="highlight">
-    <div class="container">
-      <div class="camp-banner">
-        <div>
-          <div class="badge">Summer 2025</div>
-          <h2>Debate Summer Camp</h2>
-          <p>[Placeholder] Add a short, exciting pitch for your summer camp — dates, who it's for, what students will learn, and why they should sign up now.</p>
-          <button class="btn btn-gold" style="margin-top:1.2rem" onclick="showPage('events', document.querySelector('[onclick*=events]'))">View Camp Details →</button>
-        </div>
-        <div style="font-size:5rem;opacity:0.6">🎙️</div>
+  <!-- Camp teaser -->
+  <div class="section tinted">
+    <div class="wrap">
+      <div class="camp-hero">
+        <div class="pill-light">📅 August 10–14, 2025</div>
+        <h2>Speech & Debate Summer Camp</h2>
+        <p>A one-week intensive at Northwest Chinese School's Bellevue location. Two sessions designed for different grade levels — from first-time speakers to aspiring debaters.</p>
+        <button class="btn btn-primary" onclick="go('events',null)">See Full Details →</button>
       </div>
     </div>
-  </section>
+  </div>
 
-</div><!-- end #page-home -->
+</div><!-- /home -->
 
 
-<!-- ══════════════════════════════════════
-     PAGE: ABOUT
-══════════════════════════════════════ -->
+<!-- ████████████████  ABOUT  ████████████████ -->
 <div class="page" id="page-about">
 
-  <section>
-    <div class="container">
-      <span class="section-label">Our Story</span>
-      <h2>Who We Are</h2>
-      <p class="lead">[Placeholder] Write 2–3 sentences about how Academy for Young Voices was founded — your shared passion for debate, your journey from middle school competitors to high school coaches, and why you started this program.</p>
-
-      <div style="margin-top:3rem">
-        <h2>What We Do</h2>
-        <p class="lead">[Placeholder] Describe the core activities of your academy — year-round coaching, summer camp, workshops, tournament prep, volunteer work with middle schoolers, etc.</p>
+  <div class="section">
+    <div class="wrap">
+      <div class="head-block">
+        <div class="eyebrow">Our Story</div>
+        <h2 class="sec">Who We Are</h2>
+        <p class="sub">Academy for Young Voices was founded by two Newport High School debaters who wanted to share what they've learned — and give back to the community that shaped them.</p>
       </div>
 
-      <div class="card-grid card-grid-2" style="margin-top:2rem">
-        <div class="card">
-          <div class="card-icon">🏫</div>
-          <h3>Middle School Coaching</h3>
-          <p>[Placeholder] Describe your ongoing volunteer work coaching middle school students — which school(s), how often, what format you teach.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">🎤</div>
-          <h3>Summer Debate Camp</h3>
-          <p>[Placeholder] Brief overview of the summer camp — who it's for, what makes it special, the experience students can expect.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">🥇</div>
-          <h3>Competition Prep</h3>
-          <p>[Placeholder] Talk about how you help students prepare for tournaments, scrimmages, and regional/national competitions.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">📖</div>
-          <h3>Workshops & Resources</h3>
-          <p>[Placeholder] Mention any workshops, guides, or online resources you create and share with the debate community.</p>
-        </div>
+      <div style="max-width:700px;color:var(--muted);font-size:0.97rem;line-height:1.8;margin-bottom:3rem;">
+        <p>Our goal is to inspire kids from a young age to develop and explore their public speaking skills. For us, it's all about creating a positive and supportive environment for everyone to build confidence, strengthen communication, and learn how to express their ideas with courage.</p>
+        <br/>
+        <p>We've both competed in speech and debate since middle school, and today we volunteer as coaches for middle schoolers while continuing to compete at the high school level. We started this academy because we believe every student deserves access to quality debate training — and we know exactly what it takes to grow from a nervous beginner into a confident speaker.</p>
       </div>
-    </div>
-  </section>
 
-  <!-- Team -->
-  <section class="highlight">
-    <div class="container">
-      <span class="section-label">Meet the Team</span>
-      <h2>Your Coaches</h2>
-      <p class="lead">We're high school students and experienced debaters who are passionate about giving back to the community that shaped us.</p>
+      <!-- Coaches -->
+      <div class="eyebrow" style="margin-bottom:1rem">Meet the Coaches</div>
+      <div class="grid-2">
 
-      <div class="team-grid">
-        <div class="team-card">
-          <div class="avatar">Y</div>
-          <h3>[Coach Name 1]</h3>
-          <div class="role">Head Coach & Co-Founder</div>
-          <p>[Placeholder] School, years of debate experience, notable achievements, favorite event/format.</p>
+        <div class="tcard">
+          <div class="avatar-wrap">
+            <div class="av">H</div>
+            <div class="av-info">
+              <div class="name">Hannah Li</div>
+              <div class="role">Co-Founder · Head Coach</div>
+            </div>
+          </div>
+          <p>Hannah is a student at Newport High School with 3 years of speech and debate experience. She has competed in Lincoln-Douglas and Policy Debate formats, placing <strong style="color:var(--navy)">2nd at Washington State's National Qualifiers for Policy</strong> and attending the WIAA State Tournament. During the locals season, she debated both LD and Policy formats and participated in Impromptu Speaking. Hannah started speech in 5th grade and debate at Newport High School.</p>
+          <p style="margin-top:0.8rem">Outside of debate, Hannah plays piano and has competed in the PNW Chopin Festival, Sona-Fest, and SYAMFA. She also enjoys swimming.</p>
+          <div class="tag-row">
+            <span class="chip">Lincoln-Douglas</span>
+            <span class="chip">Policy</span>
+            <span class="chip">Impromptu</span>
+            <span class="chip amber">WA State Qualifier</span>
+          </div>
         </div>
-        <div class="team-card">
-          <div class="avatar">Q</div>
-          <h3>[Coach Name 2]</h3>
-          <div class="role">Head Coach & Co-Founder</div>
-          <p>[Placeholder] School, years of debate experience, notable achievements, favorite event/format.</p>
+
+        <div class="tcard">
+          <div class="avatar-wrap">
+            <div class="av">Y</div>
+            <div class="av-info">
+              <div class="name">Yuqi Liu</div>
+              <div class="role">Co-Founder · Head Coach</div>
+            </div>
+          </div>
+          <p>Yuqi is a student at Newport High School with 4 years of debate experience across Lincoln-Douglas, Public Forum, and Parliamentary formats. She placed <strong style="color:var(--navy)">top 8 at Washington State's National Qualifiers for Lincoln-Douglas</strong> and earned top placements at multiple local tournaments. She also participated in Informative Speaking for the past year. Yuqi first started debating at Tyee Middle School as a 6th grader, where she placed as top speaker with a winning record.</p>
+          <p style="margin-top:0.8rem">Outside of debate, Yuqi enjoys air riffling and figure skating.</p>
+          <div class="tag-row">
+            <span class="chip">Lincoln-Douglas</span>
+            <span class="chip">Public Forum</span>
+            <span class="chip">Parliamentary</span>
+            <span class="chip amber">WA State Top 8</span>
+          </div>
         </div>
+
       </div>
-    </div>
-  </section>
 
-  <!-- Values -->
-  <section>
-    <div class="container">
-      <span class="section-label">Our Values</span>
-      <h2>What We Believe In</h2>
-      <div class="card-grid card-grid-3">
-        <div class="card">
-          <div class="card-icon">💡</div>
+      <div class="divider"></div>
+
+      <!-- Values -->
+      <div class="head-block">
+        <div class="eyebrow">Our Values</div>
+        <h2 class="sec">What We Stand For</h2>
+      </div>
+      <div class="grid-3">
+        <div class="fcard">
+          <div class="ico">💡</div>
           <h3>Critical Thinking</h3>
-          <p>[Placeholder] How debate teaches students to analyze arguments, question assumptions, and think independently.</p>
+          <p>Debate teaches students to analyze arguments from every angle, question assumptions, and form well-reasoned opinions independently.</p>
         </div>
-        <div class="card">
-          <div class="card-icon">🌍</div>
-          <h3>Civic Engagement</h3>
-          <p>[Placeholder] How debate connects students to real-world issues and empowers them to be engaged citizens.</p>
+        <div class="fcard">
+          <div class="ico">💬</div>
+          <h3>Confident Communication</h3>
+          <p>We build skills that go far beyond debate rounds — presentations, interviews, class discussions, and everyday leadership.</p>
         </div>
-        <div class="card">
-          <div class="card-icon">🤲</div>
-          <h3>Community</h3>
-          <p>[Placeholder] Your commitment to making debate accessible and building a supportive, inclusive community.</p>
+        <div class="fcard">
+          <div class="ico">🤲</div>
+          <h3>Inclusive Community</h3>
+          <p>We're committed to making speech and debate accessible and welcoming to every student, regardless of experience level.</p>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-</div><!-- end #page-about -->
+</div><!-- /about -->
 
 
-<!-- ══════════════════════════════════════
-     PAGE: EVENTS
-══════════════════════════════════════ -->
+<!-- ████████████████  EVENTS  ████████████████ -->
 <div class="page" id="page-events">
 
-  <section>
-    <div class="container">
-
-      <!-- Camp Banner -->
-      <div class="camp-banner">
-        <div>
-          <div class="badge">⭐ Featured Event</div>
-          <h2>Summer Debate Camp 2025</h2>
-          <p>[Placeholder] Add a compelling 2–3 sentence description of the summer camp — who should attend, what they'll gain, and the overall experience.</p>
-          <div style="display:flex;gap:2rem;flex-wrap:wrap;margin-top:1.5rem;font-size:0.93rem">
-            <div>📅 <strong>Dates:</strong> <span style="color:rgba(255,255,255,0.75)">[TBD — e.g., July 7–18, 2025]</span></div>
-            <div>📍 <strong>Location:</strong> <span style="color:rgba(255,255,255,0.75)">[TBD — e.g., Bellevue, WA]</span></div>
-            <div>👦 <strong>Ages:</strong> <span style="color:rgba(255,255,255,0.75)">[TBD — e.g., Grades 5–8]</span></div>
-            <div>💰 <strong>Cost:</strong> <span style="color:rgba(255,255,255,0.75)">[TBD]</span></div>
-          </div>
-          <button class="btn btn-gold" style="margin-top:1.5rem" onclick="showPage('contact', document.querySelector('[onclick*=contact]'))">Register Interest →</button>
-        </div>
+  <div class="section">
+    <div class="wrap">
+      <div class="head-block">
+        <div class="eyebrow">Summer 2025</div>
+        <h2 class="sec">Speech & Debate Workshop</h2>
+        <p class="sub">This August, we're partnering with Northwest Chinese School for a one-week speech and debate intensive in Bellevue, WA. Two sessions — designed for different grade levels.</p>
       </div>
 
-      <!-- What's included -->
-      <span class="section-label">What's Included</span>
-      <h2>Camp Curriculum</h2>
-      <p class="lead">[Placeholder] Describe the daily structure — morning sessions, practice rounds, guest speakers, fun activities, etc.</p>
-
-      <div class="card-grid card-grid-3" style="margin-top:2rem">
-        <div class="card">
-          <div class="card-icon">🗣️</div>
-          <h3>Public Speaking Basics</h3>
-          <p>[Placeholder] Describe what students will learn in this module — delivery, eye contact, pace, confidence.</p>
+      <!-- Big camp card -->
+      <div class="camp-hero">
+        <div class="pill-light">📍 Northwest Chinese School · Bellevue, WA</div>
+        <h2>Summer Debate Camp 2025</h2>
+        <p>A one-week workshop with sessions tailored to your child's grade level. Students will develop real speaking and debate skills in a fun, encouraging environment — coached by experienced high school debaters.</p>
+        <div class="camp-meta">
+          <div class="camp-meta-item"><span class="label">📅 Dates</span><span class="val">August 10 – 14, 2025</span></div>
+          <div class="camp-meta-item"><span class="label">📍 Location</span><span class="val">Northwest Chinese School, Bellevue</span></div>
+          <div class="camp-meta-item"><span class="label">👦 Grades</span><span class="val">3 – 8</span></div>
         </div>
-        <div class="card">
-          <div class="card-icon">⚡</div>
+        <button class="btn btn-primary" onclick="go('contact',null)">Express Interest →</button>
+      </div>
+
+      <!-- Two sessions -->
+      <div class="eyebrow" style="margin-bottom:1rem">Two Sessions Available</div>
+      <div class="grid-2">
+
+        <div class="scard">
+          <div class="scard-head">
+            <span class="badge badge-blue">Grades 3 – 4</span>
+            <h3>Speech Workshop</h3>
+          </div>
+          <div class="scard-body">
+            <p>This one-week class is the perfect place to improve your ability to plan, structure, and present speeches with confidence! Students will develop invaluable public speaking skills in a supportive setting.</p>
+            <div class="meta-row">
+              <div class="mi">⏰ <span><strong>Time:</strong> 10:00 – 11:45 AM</span></div>
+              <div class="mi">📅 <span><strong>Dates:</strong> August 10 – 14, 2025</span></div>
+              <div class="mi">🎯 <span><strong>Focus:</strong> Speech planning, structure & delivery</span></div>
+              <div class="mi">👦 <span><strong>For:</strong> Grades 3 – 4</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scard">
+          <div class="scard-head">
+            <span class="badge badge-amber">Grades 5 – 8</span>
+            <h3>Speech & Debate Workshop</h3>
+          </div>
+          <div class="scard-body">
+            <p>Build essential public speaking and debate skills in this engaging one-week workshop! Strengthen your ability to plan, organize, and confidently deliver speeches while developing persuasive communication techniques.</p>
+            <div class="meta-row">
+              <div class="mi">⏰ <span><strong>Time:</strong> 1:30 – 3:45 PM</span></div>
+              <div class="mi">📅 <span><strong>Dates:</strong> August 10 – 14, 2025</span></div>
+              <div class="mi">🎯 <span><strong>Focus:</strong> Debate skills & persuasive communication</span></div>
+              <div class="mi">👦 <span><strong>For:</strong> Grades 5 – 8</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- What they'll learn -->
+      <div class="head-block">
+        <div class="eyebrow">Curriculum</div>
+        <h2 class="sec">What Students Will Learn</h2>
+      </div>
+      <div class="grid-3">
+        <div class="fcard">
+          <div class="ico">🗣️</div>
+          <h3>Public Speaking Fundamentals</h3>
+          <p>Delivery, eye contact, pacing, and stage presence — the core skills every great speaker needs.</p>
+        </div>
+        <div class="fcard">
+          <div class="ico">📝</div>
+          <h3>Speech Structure</h3>
+          <p>How to plan, outline, and organize a speech that is clear, compelling, and easy to follow.</p>
+        </div>
+        <div class="fcard">
+          <div class="ico">⚡</div>
           <h3>Argumentation & Logic</h3>
-          <p>[Placeholder] Describe how you teach students to build strong arguments, find evidence, and reason clearly.</p>
+          <p>Building strong arguments, identifying weaknesses in opposing views, and reasoning clearly under pressure.</p>
         </div>
-        <div class="card">
-          <div class="card-icon">🔍</div>
+        <div class="fcard">
+          <div class="ico">🔍</div>
           <h3>Research Skills</h3>
-          <p>[Placeholder] Explain how you teach students to find credible sources and understand complex policy issues.</p>
+          <p>Finding credible sources, evaluating evidence, and using facts to support persuasive claims.</p>
         </div>
-        <div class="card">
-          <div class="card-icon">🤺</div>
+        <div class="fcard">
+          <div class="ico">🤺</div>
           <h3>Practice Rounds</h3>
-          <p>[Placeholder] Describe the mock debate format — how rounds work, how feedback is given, how students improve.</p>
+          <p>Simulated debate rounds with real-time feedback from coaches in a low-pressure, encouraging setting.</p>
         </div>
-        <div class="card">
-          <div class="card-icon">🧠</div>
-          <h3>Cross-Examination</h3>
-          <p>[Placeholder] How you teach students to ask smart questions and respond effectively under pressure.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">🏅</div>
-          <h3>Mini Tournament</h3>
-          <p>[Placeholder] Describe any end-of-camp showcase, tournament, or presentation that gives students a real experience.</p>
-        </div>
-      </div>
-
-      <!-- Other Events -->
-      <div style="margin-top:4rem">
-        <span class="section-label">Upcoming Events</span>
-        <h2>More Events</h2>
-        <div class="card-grid card-grid-2" style="margin-top:2rem">
-          <div class="event-card">
-            <div class="event-head">
-              <div class="date">📅 [Date TBD]</div>
-              <h3>Intro to Debate Workshop</h3>
-            </div>
-            <div class="event-body">
-              <p>[Placeholder] Short description of this workshop — who it's for, what will be covered, where it's held.</p>
-              <span class="tag">Free</span>
-              <span class="tag">Beginners</span>
-            </div>
-          </div>
-          <div class="event-card">
-            <div class="event-head">
-              <div class="date">📅 [Date TBD]</div>
-              <h3>Parent Info Night</h3>
-            </div>
-            <div class="event-body">
-              <p>[Placeholder] Describe the parent information session — what parents will learn about the camp, Q&A format, etc.</p>
-              <span class="tag">Virtual / In-Person</span>
-              <span class="tag">Parents</span>
-            </div>
-          </div>
+        <div class="fcard">
+          <div class="ico">💪</div>
+          <h3>Confidence Building</h3>
+          <p>Skills and habits that translate beyond debate — into school presentations, leadership, and everyday life.</p>
         </div>
       </div>
 
     </div>
-  </section>
-</div><!-- end #page-events -->
+  </div>
+</div><!-- /events -->
 
 
-<!-- ══════════════════════════════════════
-     PAGE: RESOURCES
-══════════════════════════════════════ -->
+<!-- ████████████████  RESOURCES  ████████████████ -->
 <div class="page" id="page-resources">
 
-  <section>
-    <div class="container">
-      <span class="section-label">Learning Hub</span>
-      <h2>Debate Resources</h2>
-      <p class="lead">Everything you need to start — or sharpen — your debate journey. Free guides, videos, and tools curated by our coaches.</p>
+  <div class="section">
+    <div class="wrap">
+      <div class="head-block">
+        <div class="eyebrow">Learning Hub</div>
+        <h2 class="sec">Debate Resources</h2>
+        <p class="sub">Free guides and links to help you start — or sharpen — your debate journey, curated by our coaches.</p>
+      </div>
 
-      <!-- Beginner -->
-      <h3 style="margin-top:3rem;margin-bottom:0.5rem;color:var(--navy)">🌱 Getting Started</h3>
-      <div class="resource-list">
-        <div class="resource-item">
-          <div class="resource-icon">📄</div>
-          <div class="resource-info">
-            <h4>Beginner's Guide to Debate</h4>
-            <p>[Placeholder] A short description of this resource — what it covers and who it's for.</p>
-          </div>
-          <div class="resource-link"><a href="#">View →</a></div>
+      <h3 style="font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:0.8rem">🌱 Getting Started</h3>
+      <div class="rlist" style="margin-bottom:2rem">
+        <div class="ritem">
+          <div class="rico">📄</div>
+          <div class="rinfo"><h4>Beginner's Guide to Debate</h4><p>An introduction to what debate is, why it matters, and how to get involved.</p></div>
+          <div class="rlink"><a href="#">Coming Soon</a></div>
         </div>
-        <div class="resource-item">
-          <div class="resource-icon">🎥</div>
-          <div class="resource-info">
-            <h4>How to Write a Constructive Speech</h4>
-            <p>[Placeholder] Video walkthrough or written guide on constructive speech structure.</p>
-          </div>
-          <div class="resource-link"><a href="#">View →</a></div>
+        <div class="ritem">
+          <div class="rico">📋</div>
+          <div class="rinfo"><h4>Debate Formats Explained (LD, PF, Policy, Parli)</h4><p>A quick-reference breakdown of the most common competitive debate formats.</p></div>
+          <div class="rlink"><a href="#">Coming Soon</a></div>
         </div>
-        <div class="resource-item">
-          <div class="resource-icon">📋</div>
-          <div class="resource-info">
-            <h4>Debate Formats Explained (LD, PF, Policy)</h4>
-            <p>[Placeholder] Quick-reference breakdown of the most common debate formats.</p>
-          </div>
-          <div class="resource-link"><a href="#">View →</a></div>
+        <div class="ritem">
+          <div class="rico">🎥</div>
+          <div class="rinfo"><h4>How to Write a Constructive Speech</h4><p>Step-by-step walkthrough for planning and delivering your first constructive speech.</p></div>
+          <div class="rlink"><a href="#">Coming Soon</a></div>
         </div>
       </div>
 
-      <!-- Intermediate -->
-      <h3 style="margin-top:2.5rem;margin-bottom:0.5rem;color:var(--navy)">⚡ Skill Building</h3>
-      <div class="resource-list">
-        <div class="resource-item">
-          <div class="resource-icon">🧩</div>
-          <div class="resource-info">
-            <h4>Argumentation & Fallacies</h4>
-            <p>[Placeholder] Description of this resource — common logical fallacies, how to spot and rebut them.</p>
-          </div>
-          <div class="resource-link"><a href="#">View →</a></div>
+      <h3 style="font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:0.8rem">⚡ Skill Building</h3>
+      <div class="rlist" style="margin-bottom:2rem">
+        <div class="ritem">
+          <div class="rico">🧩</div>
+          <div class="rinfo"><h4>Argumentation & Common Fallacies</h4><p>Learn how to build airtight arguments and spot weaknesses in your opponent's case.</p></div>
+          <div class="rlink"><a href="#">Coming Soon</a></div>
         </div>
-        <div class="resource-item">
-          <div class="resource-icon">🔍</div>
-          <div class="resource-info">
-            <h4>Research & Evidence Guide</h4>
-            <p>[Placeholder] How to find, evaluate, and cite evidence effectively in competitive debate.</p>
-          </div>
-          <div class="resource-link"><a href="#">View →</a></div>
+        <div class="ritem">
+          <div class="rico">🤺</div>
+          <div class="rinfo"><h4>Cross-Examination Strategies</h4><p>Tips and tactics for asking smart questions and staying composed under pressure.</p></div>
+          <div class="rlink"><a href="#">Coming Soon</a></div>
         </div>
-        <div class="resource-item">
-          <div class="resource-icon">🤺</div>
-          <div class="resource-info">
-            <h4>Cross-Examination Strategies</h4>
-            <p>[Placeholder] Tips and tactics for asking better questions and controlling cross-ex rounds.</p>
-          </div>
-          <div class="resource-link"><a href="#">View →</a></div>
+        <div class="ritem">
+          <div class="rico">🔍</div>
+          <div class="rinfo"><h4>Research & Evidence Guide</h4><p>How to find, evaluate, and cite evidence effectively in competitive debate rounds.</p></div>
+          <div class="rlink"><a href="#">Coming Soon</a></div>
         </div>
       </div>
 
-      <!-- External links -->
-      <h3 style="margin-top:2.5rem;margin-bottom:0.5rem;color:var(--navy)">🔗 Useful Links</h3>
-      <div class="resource-list">
-        <div class="resource-item">
-          <div class="resource-icon">🌐</div>
-          <div class="resource-info">
-            <h4>NSDA — National Speech & Debate Association</h4>
-            <p>Official rules, topics, and resources for competitive debate.</p>
-          </div>
-          <div class="resource-link"><a href="https://www.speechanddebate.org" target="_blank">Visit →</a></div>
+      <h3 style="font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:0.8rem">🔗 Useful External Links</h3>
+      <div class="rlist">
+        <div class="ritem">
+          <div class="rico">🌐</div>
+          <div class="rinfo"><h4>NSDA — National Speech & Debate Association</h4><p>Official rules, current topics, and resources for competitive speech and debate.</p></div>
+          <div class="rlink"><a href="https://www.speechanddebate.org" target="_blank">Visit →</a></div>
         </div>
-        <div class="resource-item">
-          <div class="resource-icon">🌐</div>
-          <div class="resource-info">
-            <h4>[Placeholder — Add a useful external resource]</h4>
-            <p>[Placeholder] Description of why this link is valuable.</p>
-          </div>
-          <div class="resource-link"><a href="#">Visit →</a></div>
+        <div class="ritem">
+          <div class="rico">🌐</div>
+          <div class="rinfo"><h4>Northwest Chinese School</h4><p>Our partner school hosting the August 2025 summer camp in Bellevue, WA.</p></div>
+          <div class="rlink"><a href="#" target="_blank">Visit →</a></div>
         </div>
       </div>
 
     </div>
-  </section>
-</div><!-- end #page-resources -->
+  </div>
+</div><!-- /resources -->
 
 
-<!-- ══════════════════════════════════════
-     PAGE: CONTACT
-══════════════════════════════════════ -->
+<!-- ████████████████  CONTACT  ████████████████ -->
 <div class="page" id="page-contact">
 
-  <section>
-    <div class="container">
-      <span class="section-label">Get In Touch</span>
-      <h2>Contact Us</h2>
-      <p class="lead">Feel free to reach out with any questions about our programs, summer camp, or coaching!</p>
+  <div class="section">
+    <div class="wrap">
+      <div class="head-block">
+        <div class="eyebrow">Get In Touch</div>
+        <h2 class="sec">Contact Us</h2>
+        <p class="sub">Feel free to reach out with any questions about our programs, summer camp, or coaching!</p>
+      </div>
 
       <div class="contact-grid">
-
-        <!-- Info side -->
-        <div class="contact-info">
+        <div class="cinfo">
           <h3>Ways to Reach Us</h3>
-          <div class="contact-row">
-            <div class="ci">📧</div>
-            <div>
+          <div class="crow">
+            <div class="cico">📧</div>
+            <div class="ctext">
               <strong>Email</strong>
-              <span><a href="mailto:academyforyoungvoices@gmail.com" style="color:var(--accent)">academyforyoungvoices@gmail.com</a></span>
+              <a href="mailto:academyforyoungvoices@gmail.com">academyforyoungvoices@gmail.com</a>
             </div>
           </div>
-          <div class="contact-row">
-            <div class="ci">📞</div>
-            <div>
-              <strong>Phone</strong>
-              <span><a href="tel:425111111" style="color:var(--accent)">425-111-1111</a></span>
-            </div>
-          </div>
-          <div class="contact-row">
-            <div class="ci">📍</div>
-            <div>
+          <div class="crow">
+            <div class="cico">📍</div>
+            <div class="ctext">
               <strong>Location</strong>
-              <span>[Placeholder — City, State e.g., Bellevue, WA]</span>
+              <span>Bellevue, WA</span>
             </div>
           </div>
-          <div class="contact-row">
-            <div class="ci">⏰</div>
-            <div>
-              <strong>Response Time</strong>
-              <span>[Placeholder — e.g., We typically respond within 24 hours]</span>
+          <div class="crow">
+            <div class="cico">📅</div>
+            <div class="ctext">
+              <strong>Summer Camp</strong>
+              <span>August 10–14, 2025 · Northwest Chinese School</span>
             </div>
           </div>
 
-          <div style="margin-top:2rem;background:var(--light);border-radius:var(--radius);padding:1.5rem">
-            <h4 style="color:var(--navy);font-size:0.95rem;margin-bottom:0.6rem">🏕️ Summer Camp Inquiries</h4>
-            <p style="font-size:0.88rem;color:var(--muted)">[Placeholder] Add any specific instructions for camp registration interest — e.g., "Email us with your child's name, grade, and any prior debate experience."</p>
+          <div style="margin-top:2rem;background:var(--indigo-light);border-radius:12px;padding:1.4rem 1.6rem">
+            <h4 style="color:var(--indigo);font-size:0.88rem;font-weight:700;margin-bottom:0.4rem">🏕️ Interested in the Summer Camp?</h4>
+            <p style="font-size:0.85rem;color:#3730a3;line-height:1.65">Email us with your child's name, grade, and any prior speech or debate experience and we'll get back to you with registration details!</p>
           </div>
         </div>
 
-        <!-- Form side -->
-        <div class="contact-form">
-          <h3>Send Us a Message</h3>
-          <label for="name">Your Name</label>
-          <input type="text" id="name" placeholder="e.g., Jane Smith" />
-
-          <label for="email">Email Address</label>
-          <input type="email" id="email" placeholder="you@example.com" />
-
-          <label for="subject">Subject</label>
-          <select id="subject">
+        <div class="cform">
+          <h3>Send a Message</h3>
+          <label>Your Name</label>
+          <input type="text" id="f-name" placeholder="Jane Smith" />
+          <label>Email Address</label>
+          <input type="email" id="f-email" placeholder="you@example.com" />
+          <label>Subject</label>
+          <select id="f-subject">
             <option value="">Select a topic…</option>
-            <option>Summer Camp Registration</option>
+            <option>Summer Camp — Grades 3–4 Session</option>
+            <option>Summer Camp — Grades 5–8 Session</option>
             <option>General Coaching Inquiry</option>
             <option>School Partnership</option>
             <option>Other</option>
           </select>
-
-          <label for="message">Message</label>
-          <textarea id="message" placeholder="Tell us a bit about yourself and what you're looking for…"></textarea>
-
-          <button class="btn btn-navy" style="width:100%" onclick="handleSubmit()">Send Message</button>
-          <p id="form-feedback" style="margin-top:0.8rem;font-size:0.85rem;color:green;display:none">✅ Thanks! We'll get back to you soon.</p>
+          <label>Message</label>
+          <textarea id="f-msg" placeholder="Tell us about your student and what you're looking for…"></textarea>
+          <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="submitForm()">Send Message</button>
+          <p id="f-fb" style="display:none;margin-top:0.8rem;font-size:0.84rem;text-align:center"></p>
         </div>
       </div>
     </div>
-  </section>
-</div><!-- end #page-contact -->
+  </div>
+
+</div><!-- /contact -->
 
 
-<!-- ══ FOOTER ══ -->
+<!-- FOOTER -->
 <footer>
-  <div class="footer-inner">
+  <div class="footer-wrap">
     <div class="footer-top">
-      <div class="footer-brand">
-        <div class="logo">🎤 <span>Academy</span> for Young Voices</div>
-        <p>Empowering the next generation of confident communicators and critical thinkers through competitive debate.</p>
+      <div class="fb">
+        <div class="flogo">Academy for Young<span class="dot"> Voices</span></div>
+        <p>Inspiring the next generation of confident communicators and critical thinkers through speech and debate.</p>
       </div>
-      <div class="footer-col">
+      <div class="fc">
         <h4>Pages</h4>
         <ul>
-          <li><a href="#" onclick="showPage('home',this)">Home</a></li>
-          <li><a href="#" onclick="showPage('about',this)">About</a></li>
-          <li><a href="#" onclick="showPage('events',this)">Events</a></li>
-          <li><a href="#" onclick="showPage('resources',this)">Resources</a></li>
-          <li><a href="#" onclick="showPage('contact',this)">Contact Us</a></li>
+          <li><a href="#" onclick="go('home',null);return false;">Home</a></li>
+          <li><a href="#" onclick="go('about',null);return false;">About</a></li>
+          <li><a href="#" onclick="go('events',null);return false;">Events</a></li>
+          <li><a href="#" onclick="go('resources',null);return false;">Resources</a></li>
+          <li><a href="#" onclick="go('contact',null);return false;">Contact</a></li>
         </ul>
       </div>
-      <div class="footer-col">
+      <div class="fc">
         <h4>Contact</h4>
         <ul>
           <li><a href="mailto:academyforyoungvoices@gmail.com">academyforyoungvoices@gmail.com</a></li>
-          <li><a href="tel:425111111">425-111-1111</a></li>
+          <li><a>Bellevue, WA</a></li>
         </ul>
       </div>
     </div>
-    <div class="footer-bottom">
-      © 2025 Academy for Young Voices. All rights reserved.
-    </div>
+    <div class="footer-bottom">© 2025 Academy for Young Voices · All rights reserved</div>
   </div>
 </footer>
 
 <script>
-  // Page navigation
-  function showPage(id, el) {
+  function go(id, el) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-' + id).classList.add('active');
-    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-    // highlight correct nav link
-    const links = document.querySelectorAll('.nav-links a');
-    links.forEach(link => {
-      if (link.getAttribute('onclick') && link.getAttribute('onclick').includes("'" + id + "'")) {
-        link.classList.add('active');
-      }
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.classList.remove('active');
+      const oc = a.getAttribute('onclick') || '';
+      if (oc.includes("'" + id + "'")) a.classList.add('active');
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    // close mobile menu
     document.getElementById('navLinks').classList.remove('open');
-    return false;
   }
 
-  // Mobile nav toggle
   document.getElementById('navToggle').addEventListener('click', () => {
     document.getElementById('navLinks').classList.toggle('open');
   });
 
-  // Contact form mock submit
-  function handleSubmit() {
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const msg = document.getElementById('message').value.trim();
-    const fb = document.getElementById('form-feedback');
-    if (!name || !email || !msg) {
-      fb.style.color = 'red';
-      fb.textContent = '⚠️ Please fill in your name, email, and message.';
-      fb.style.display = 'block';
-      return;
+  function submitForm() {
+    const n = document.getElementById('f-name').value.trim();
+    const e = document.getElementById('f-email').value.trim();
+    const m = document.getElementById('f-msg').value.trim();
+    const fb = document.getElementById('f-fb');
+    if (!n || !e || !m) {
+      fb.style.color = '#ef4444'; fb.textContent = '⚠️ Please fill in your name, email, and message.'; fb.style.display = 'block'; return;
     }
-    fb.style.color = 'green';
-    fb.textContent = '✅ Thanks! We\'ll get back to you soon.';
-    fb.style.display = 'block';
+    fb.style.color = '#10b981'; fb.textContent = '✅ Message sent! We\'ll get back to you soon.'; fb.style.display = 'block';
   }
 </script>
 </body>
